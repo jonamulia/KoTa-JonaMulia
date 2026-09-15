@@ -40,7 +40,7 @@ export async function GET(req: Request) {
     // Admin ID
     const allUsers = await db.orm.public.User.all();
     const adminUser = allUsers.find(u => u.role === "ADMIN");
-    let potonganAdmin = [];
+    let potonganAdmin: any[] = [];
     if (adminUser) {
       const allPotonganAdmin = await db.orm.public.Potongan.where({ id_user: adminUser.id_user }).all();
       potonganAdmin = allPotonganAdmin

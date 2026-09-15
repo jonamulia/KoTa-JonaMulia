@@ -33,10 +33,10 @@ export async function POST(req: Request) {
     // Check if it's UANG SAKU
     if (jenis === "UANG SAKU") {
       // Get the target user's role to determine the ratio
-      const targetUser = await db.orm.public.User.findFirst({ where: { id_user: parsedIdUser } });
+      const targetUser = await db.orm.public.User.where({ id_user: parsedIdUser }).first();
       if (!targetUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
       
-      const adminUtama = await db.orm.public.User.findFirst({ where: { role: "ADMIN" } });
+      const adminUtama = await db.orm.public.User.where({ role: "ADMIN" }).first();
       if (!adminUtama) return NextResponse.json({ error: "Admin not found" }, { status: 404 });
 
       // Determine ratio

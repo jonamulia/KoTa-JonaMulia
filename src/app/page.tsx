@@ -47,7 +47,7 @@ export default function Home() {
   if ('error' in data) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] text-red-500 font-medium">
-        Error memuat dashboard: {data.error}
+        Error memuat dashboard: {String(data.error)}
       </div>
     );
   }

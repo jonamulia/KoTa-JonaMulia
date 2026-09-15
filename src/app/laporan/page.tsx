@@ -233,7 +233,7 @@ export default function LaporanPage() {
                     if (activeTab === "komisi") {
                       const paginatedData = data.komisi.slice(startIndex, startIndex + ITEMS_PER_PAGE);
                       return data.komisi.length === 0 ? <tr className="text-center"><td colSpan={5} className="p-8 text-gray-400">Tidak ada komisi cair di tanggal ini.</td></tr> :
-                      paginatedData.map((item, i) => (
+                      paginatedData.map((item: any, i) => (
                         <tr key={i} className="hover:bg-gray-50/50">
                         <td className="px-6 py-3 whitespace-nowrap">{new Date(item.tanggal).toLocaleDateString("id-ID")}</td>
                         <td className="px-6 py-3 font-medium">{item.nama_user}</td>

@@ -54,7 +54,7 @@ export async function GET() {
 
   if (role === "ADMIN") {
     const sumSetoran = successfulPenagihan.reduce((sum: number, p: any) => sum + p.nominal, 0);
-    const potonganAdmin = await db.orm.public.Potongan.where({ id_user: userId }).all();
+    const potonganAdmin = await db.orm.public.Potongan.where({ id_user: parseInt(userId) }).all();
     const sumPotonganAdmin = potonganAdmin.reduce((sum: number, p: any) => sum + p.nominal, 0);
     totalPendapatan = sumSetoran - sumPotonganAdmin; // Uang Masuk Bersih
 
@@ -73,7 +73,7 @@ export async function GET() {
     profit = totalPendapatan - totalModal - totalKomisi;
 
   } else {
-    const komisi = await db.orm.public.KomisiLog.where({ id_user: userId }).all();
+    const komisi = await db.orm.public.KomisiLog.where({ id_user: parseInt(userId) }).all();
     // KomisiLog already contains negative values for deductions, so we just sum it.
     totalPendapatan = komisi.reduce((sum: number, k: any) => sum + (k.nominal_masuk || 0) - (k.nominal_keluar || 0), 0);
   }

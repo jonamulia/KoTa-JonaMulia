@@ -3,13 +3,14 @@ import { db } from "@/prisma/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
     const id = parseInt(params.id);
-    await db.orm.public.KomisiLog.delete({ id_log: id });
+    await db.orm.public.KomisiLog.where({ id_log: id }).delete();
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Delete koreksi error:", error);
@@ -17,7 +18,8 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -29,12 +31,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ error: "Nominal harus diisi" }, { status: 400 });
     }
 
-    const updated = await db.orm.public.KomisiLog.update({
-      where: { id_log: id },
-      data: {
-        nominal_masuk: parseInt(nominal),
-        keterangan: keterangan || "",
-      }
+    const updated = await db.orm.public.KomisiLog.where({ id_log: id }).update({
+      nominal_masuk: parseInt(nominal),
+      keterangan: keterangan || "",
     });
 
     return NextResponse.json({ success: true, updated });
