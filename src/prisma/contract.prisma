@@ -1,0 +1,100 @@
+// use prisma-8
+
+model User {
+  id_user      Int          @id @default(autoincrement())
+  nama         String
+  username     String       @unique
+  password     String
+  role         Role         @default(SALES)
+  
+  pesananSales Pesanan[]    @relation("SalesPesanan")
+  pesananNego  Pesanan[]    @relation("NegoPesanan")
+  penagihan    Penagihan[]
+  potongan     Potongan[]
+  komisiLog    KomisiLog[]
+}
+
+enum Role {
+  ADMIN
+  NEGO
+  SALES
+  PENAGIH
+}
+
+model Klien {
+  id_klien     Int          @id @default(autoincrement())
+  nama         String
+  alamat       String?
+  kontak       String?
+  
+  pesanan      Pesanan[]
+}
+
+model Barang {
+  id_barang        Int          @id @default(autoincrement())
+  nama_barang      String
+  harga            Int
+  harga_beli       Int          @default(0)
+  komisi_penjualan Int          @default(0)
+  
+  pesanan          Pesanan[]
+}
+
+model Pesanan {
+  id_pesanan   Int          @id @default(autoincrement())
+  tanggal      DateTime     @default(now())
+  qty          Int          @default(1)
+  total_harga  Int
+  status       String       // e.g., 'AKTIF', 'LUNAS', 'MACET'
+  
+  id_klien     Int
+  klien        Klien        @relation(fields: [id_klien], references: [id_klien])
+  
+  id_barang    Int
+  barang       Barang       @relation(fields: [id_barang], references: [id_barang])
+  
+  id_sales     Int
+  sales        User         @relation("SalesPesanan", fields: [id_sales], references: [id_user])
+  
+  id_nego      Int
+  nego         User         @relation("NegoPesanan", fields: [id_nego], references: [id_user])
+  
+  penagihan    Penagihan[]
+}
+
+model Penagihan {
+  id_penagihan Int          @id @default(autoincrement())
+  percobaan_ke Int          @default(1)
+  status       String       // 'BERHASIL', 'GAGAL', 'PENDING'
+  nominal      Int?
+  tanggal      DateTime     @default(now())
+  catatan      String?
+  
+  id_pesanan   Int
+  pesanan      Pesanan      @relation(fields: [id_pesanan], references: [id_pesanan])
+  
+  id_penagih   Int
+  penagih      User         @relation(fields: [id_penagih], references: [id_user])
+}
+
+model Potongan {
+  id_potongan  Int          @id @default(autoincrement())
+  jenis        String       // e.g., 'KASBON', 'SABUN'
+  nominal      Int
+  tanggal      DateTime     @default(now())
+  
+  id_user      Int
+  user         User         @relation(fields: [id_user], references: [id_user])
+}
+
+model KomisiLog {
+  id_log       Int          @id @default(autoincrement())
+  jenis_komisi String       // e.g., 'UANG_MASUK', 'POTONGAN'
+  nominal_masuk Int
+  id_referensi Int?         // ID Pembayaran atau ID Potongan terkait
+  keterangan   String?      // Keterangan atau catatan khusus untuk bonus/tips
+  created_at   DateTime     @default(now())
+  
+  id_user      Int
+  user         User         @relation(fields: [id_user], references: [id_user])
+}

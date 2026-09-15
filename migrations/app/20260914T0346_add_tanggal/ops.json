@@ -1,0 +1,44 @@
+[
+  {
+    "id": "column.public.pesanan.tanggal",
+    "label": "Add column \"tanggal\" to \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tanggal",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tanggal\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "tanggal"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tanggal\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ADD COLUMN \"tanggal\" timestamptz DEFAULT (now()) NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tanggal\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "tanggal"
+        ]
+      }
+    ]
+  }
+]

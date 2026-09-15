@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id_user      Int          @id @default(autoincrement())
+  nama         String
+  username     String       @unique
+  password     String
+  role         Role         @default(SALES)
+  
+  pesananSales Pesanan[]    @relation("SalesPesanan")
+  pesananNego  Pesanan[]    @relation("NegoPesanan")
+  pembayaran   Pembayaran[]
+  potongan     Potongan[]
+  komisiLog    KomisiLog[]
+}
+
+enum Role {
+  ADMIN
+  NEGO
+  SALES
+  PENAGIH
+}
+
+model Pesanan {
+  id_pesanan   Int          @id @default(autoincrement())
+  tanggal      DateTime     @default(now())
+  nama_klien   String
+  nama_barang  String
+  total_harga  Int
+  status       String       // e.g., 'AKTIF', 'LUNAS'
+  
+  id_sales     Int
+  sales        User         @relation("SalesPesanan", fields: [id_sales], references: [id_user])
+  
+  id_nego      Int
+  nego         User         @relation("NegoPesanan", fields: [id_nego], references: [id_user])
+  
+  pembayaran   Pembayaran[]
+}
+
+model Pembayaran {
+  id_bayar     Int          @id @default(autoincrement())
+  nominal      Int
+  tanggal      DateTime     @default(now())
+  
+  id_pesanan   Int
+  pesanan      Pesanan      @relation(fields: [id_pesanan], references: [id_pesanan])
+  
+  id_penagih   Int
+  penagih      User         @relation(fields: [id_penagih], references: [id_user])
+}
+
+model Potongan {
+  id_potongan  Int          @id @default(autoincrement())
+  jenis        String       // e.g., 'KASBON', 'SABUN'
+  nominal      Int
+  tanggal      DateTime     @default(now())
+  
+  id_user      Int
+  user         User         @relation(fields: [id_user], references: [id_user])
+}
+
+model KomisiLog {
+  id_log       Int          @id @default(autoincrement())
+  jenis_komisi String       // e.g., 'UANG_MASUK', 'POTONGAN'
+  nominal_masuk Int
+  id_referensi Int?         // ID Pembayaran atau ID Potongan terkait
+  
+  id_user      Int
+  user         User         @relation(fields: [id_user], references: [id_user])
+}

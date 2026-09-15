@@ -1,0 +1,786 @@
+[
+  {
+    "id": "dropTable.pembayaran",
+    "label": "Drop table \"pembayaran\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pembayaran\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop table \"pembayaran\"",
+        "sql": "DROP TABLE \"public\".\"pembayaran\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pembayaran\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.pesanan.nama_barang",
+    "label": "Drop column \"nama_barang\" from \"pesanan\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "nama_barang",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"nama_barang\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "nama_barang"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"nama_barang\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" DROP COLUMN \"nama_barang\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"nama_barang\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "nama_barang"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.pesanan.nama_klien",
+    "label": "Drop column \"nama_klien\" from \"pesanan\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "nama_klien",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"nama_klien\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "nama_klien"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"nama_klien\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" DROP COLUMN \"nama_klien\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"nama_klien\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "nama_klien"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.barang",
+    "label": "Create table \"barang\"",
+    "summary": "Creates table \"barang\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "barang"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"barang\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"barang\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"barang\"",
+        "sql": "CREATE TABLE \"public\".\"barang\" (\n  \"harga\" int4 NOT NULL,\n  \"id_barang\" SERIAL NOT NULL,\n  \"nama_barang\" text NOT NULL,\n  PRIMARY KEY (\"id_barang\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"barang\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"barang\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.klien",
+    "label": "Create table \"klien\"",
+    "summary": "Creates table \"klien\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "klien"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"klien\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"klien\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"klien\"",
+        "sql": "CREATE TABLE \"public\".\"klien\" (\n  \"alamat\" text,\n  \"id_klien\" SERIAL NOT NULL,\n  \"kontak\" text,\n  \"nama\" text NOT NULL,\n  PRIMARY KEY (\"id_klien\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"klien\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"klien\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.penagihan",
+    "label": "Create table \"penagihan\"",
+    "summary": "Creates table \"penagihan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "penagihan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"penagihan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"penagihan\"",
+        "sql": "CREATE TABLE \"public\".\"penagihan\" (\n  \"catatan\" text,\n  \"id_penagih\" int4 NOT NULL,\n  \"id_penagihan\" SERIAL NOT NULL,\n  \"id_pesanan\" int4 NOT NULL,\n  \"nominal\" int4,\n  \"percobaan_ke\" int4 DEFAULT 1 NOT NULL,\n  \"status\" text NOT NULL,\n  \"tanggal\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id_penagihan\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"penagihan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.pesanan.qty",
+    "label": "Add column \"qty\" to \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "qty",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"qty\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "qty"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"qty\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ADD COLUMN \"qty\" int4 DEFAULT 1 NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"qty\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "qty"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.pesanan.id_barang",
+    "label": "Add column \"id_barang\" to \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "id_barang",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"id_barang\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_barang"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"id_barang\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ADD COLUMN \"id_barang\" int4 DEFAULT 1"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"id_barang\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_barang"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.pesanan.id_barang",
+    "label": "Set NOT NULL on \"pesanan\".\"id_barang\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "id_barang",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"id_barang\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_barang"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"id_barang\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"pesanan\" WHERE \"id_barang\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"id_barang\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ALTER COLUMN \"id_barang\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"id_barang\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_barang",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.pesanan.id_klien",
+    "label": "Add column \"id_klien\" to \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "id_klien",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"id_klien\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_klien"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"id_klien\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ADD COLUMN \"id_klien\" int4 DEFAULT 1"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"id_klien\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_klien"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.pesanan.id_klien",
+    "label": "Set NOT NULL on \"pesanan\".\"id_klien\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "id_klien",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"id_klien\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_klien"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"id_klien\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"pesanan\" WHERE \"id_klien\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"id_klien\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\" ALTER COLUMN \"id_klien\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"id_klien\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "pesanan",
+          "id_klien",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.penagihan.penagihan_id_penagih_idx_d0331a88",
+    "label": "Create index \"penagihan_id_penagih_idx_d0331a88\" on \"penagihan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "penagihan_id_penagih_idx_d0331a88",
+        "table": "penagihan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"penagihan_id_penagih_idx_d0331a88\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan_id_penagih_idx_d0331a88\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"penagihan_id_penagih_idx_d0331a88\"",
+        "sql": "CREATE INDEX \"penagihan_id_penagih_idx_d0331a88\" ON \"public\".\"penagihan\" (\"id_penagih\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"penagihan_id_penagih_idx_d0331a88\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan_id_penagih_idx_d0331a88\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.penagihan.penagihan_id_pesanan_idx_cba61da2",
+    "label": "Create index \"penagihan_id_pesanan_idx_cba61da2\" on \"penagihan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "penagihan_id_pesanan_idx_cba61da2",
+        "table": "penagihan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"penagihan_id_pesanan_idx_cba61da2\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan_id_pesanan_idx_cba61da2\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"penagihan_id_pesanan_idx_cba61da2\"",
+        "sql": "CREATE INDEX \"penagihan_id_pesanan_idx_cba61da2\" ON \"public\".\"penagihan\" (\"id_pesanan\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"penagihan_id_pesanan_idx_cba61da2\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"penagihan_id_pesanan_idx_cba61da2\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pesanan.pesanan_id_barang_idx_1a8610ff",
+    "label": "Create index \"pesanan_id_barang_idx_1a8610ff\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pesanan_id_barang_idx_1a8610ff",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pesanan_id_barang_idx_1a8610ff\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_barang_idx_1a8610ff\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pesanan_id_barang_idx_1a8610ff\"",
+        "sql": "CREATE INDEX \"pesanan_id_barang_idx_1a8610ff\" ON \"public\".\"pesanan\" (\"id_barang\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pesanan_id_barang_idx_1a8610ff\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_barang_idx_1a8610ff\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pesanan.pesanan_id_klien_idx_a043e45c",
+    "label": "Create index \"pesanan_id_klien_idx_a043e45c\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pesanan_id_klien_idx_a043e45c",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pesanan_id_klien_idx_a043e45c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_klien_idx_a043e45c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pesanan_id_klien_idx_a043e45c\"",
+        "sql": "CREATE INDEX \"pesanan_id_klien_idx_a043e45c\" ON \"public\".\"pesanan\" (\"id_klien\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pesanan_id_klien_idx_a043e45c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_klien_idx_a043e45c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.penagihan.penagihan_id_pesanan_fkey",
+    "label": "Add foreign key \"penagihan_id_pesanan_fkey\" on \"penagihan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "penagihan_id_pesanan_fkey",
+        "table": "penagihan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"penagihan_id_pesanan_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "penagihan_id_pesanan_fkey",
+          "public",
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"penagihan_id_pesanan_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"penagihan\"\nADD CONSTRAINT \"penagihan_id_pesanan_fkey\"\nFOREIGN KEY (\"id_pesanan\")\nREFERENCES \"public\".\"pesanan\" (\"id_pesanan\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"penagihan_id_pesanan_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "penagihan_id_pesanan_fkey",
+          "public",
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.penagihan.penagihan_id_penagih_fkey",
+    "label": "Add foreign key \"penagihan_id_penagih_fkey\" on \"penagihan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "penagihan_id_penagih_fkey",
+        "table": "penagihan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"penagihan_id_penagih_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "penagihan_id_penagih_fkey",
+          "public",
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"penagihan_id_penagih_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"penagihan\"\nADD CONSTRAINT \"penagihan_id_penagih_fkey\"\nFOREIGN KEY (\"id_penagih\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"penagihan_id_penagih_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "penagihan_id_penagih_fkey",
+          "public",
+          "\"public\".\"penagihan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pesanan.pesanan_id_barang_fkey",
+    "label": "Add foreign key \"pesanan_id_barang_fkey\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pesanan_id_barang_fkey",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pesanan_id_barang_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_barang_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pesanan_id_barang_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\"\nADD CONSTRAINT \"pesanan_id_barang_fkey\"\nFOREIGN KEY (\"id_barang\")\nREFERENCES \"public\".\"barang\" (\"id_barang\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pesanan_id_barang_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_barang_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pesanan.pesanan_id_klien_fkey",
+    "label": "Add foreign key \"pesanan_id_klien_fkey\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pesanan_id_klien_fkey",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pesanan_id_klien_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_klien_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pesanan_id_klien_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\"\nADD CONSTRAINT \"pesanan_id_klien_fkey\"\nFOREIGN KEY (\"id_klien\")\nREFERENCES \"public\".\"klien\" (\"id_klien\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pesanan_id_klien_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_klien_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ]
+  }
+]

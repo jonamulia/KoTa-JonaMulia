@@ -1,0 +1,742 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.komisiLog",
+    "label": "Create table \"komisiLog\"",
+    "summary": "Creates table \"komisiLog\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "komisiLog"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"komisiLog\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"komisiLog\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"komisiLog\"",
+        "sql": "CREATE TABLE \"public\".\"komisiLog\" (\n  \"id_log\" SERIAL NOT NULL,\n  \"id_referensi\" int4,\n  \"id_user\" int4 NOT NULL,\n  \"jenis_komisi\" text NOT NULL,\n  \"nominal_masuk\" int4 NOT NULL,\n  PRIMARY KEY (\"id_log\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"komisiLog\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"komisiLog\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pembayaran",
+    "label": "Create table \"pembayaran\"",
+    "summary": "Creates table \"pembayaran\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pembayaran\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pembayaran\"",
+        "sql": "CREATE TABLE \"public\".\"pembayaran\" (\n  \"id_bayar\" SERIAL NOT NULL,\n  \"id_penagih\" int4 NOT NULL,\n  \"id_pesanan\" int4 NOT NULL,\n  \"nominal\" int4 NOT NULL,\n  \"tanggal\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id_bayar\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pembayaran\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pesanan",
+    "label": "Create table \"pesanan\"",
+    "summary": "Creates table \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pesanan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pesanan\"",
+        "sql": "CREATE TABLE \"public\".\"pesanan\" (\n  \"id_nego\" int4 NOT NULL,\n  \"id_pesanan\" SERIAL NOT NULL,\n  \"id_sales\" int4 NOT NULL,\n  \"nama_barang\" text NOT NULL,\n  \"nama_klien\" text NOT NULL,\n  \"status\" text NOT NULL,\n  \"total_harga\" int4 NOT NULL,\n  PRIMARY KEY (\"id_pesanan\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pesanan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.potongan",
+    "label": "Create table \"potongan\"",
+    "summary": "Creates table \"potongan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "potongan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"potongan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"potongan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"potongan\"",
+        "sql": "CREATE TABLE \"public\".\"potongan\" (\n  \"id_potongan\" SERIAL NOT NULL,\n  \"id_user\" int4 NOT NULL,\n  \"jenis\" text NOT NULL,\n  \"nominal\" int4 NOT NULL,\n  \"tanggal\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id_potongan\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"potongan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"potongan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.user",
+    "label": "Create table \"user\"",
+    "summary": "Creates table \"user\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"user\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"user\"",
+        "sql": "CREATE TABLE \"public\".\"user\" (\n  \"id_user\" SERIAL NOT NULL,\n  \"nama\" text NOT NULL,\n  \"password\" text NOT NULL,\n  \"role\" text DEFAULT 'SALES' NOT NULL,\n  \"username\" text NOT NULL,\n  PRIMARY KEY (\"id_user\"),\n  CONSTRAINT \"user_role_check_a9af11a8\" CHECK (\"role\" IN ('ADMIN', 'NEGO', 'SALES', 'PENAGIH'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"user\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.user.user_username_key",
+    "label": "Add unique constraint on \"user\" (username)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "user_username_key",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"user_username_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_username_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"user_username_key\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ADD CONSTRAINT \"user_username_key\" UNIQUE (\"username\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"user_username_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_username_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.komisiLog.komisiLog_id_user_idx_52684e74",
+    "label": "Create index \"komisiLog_id_user_idx_52684e74\" on \"komisiLog\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "komisiLog_id_user_idx_52684e74",
+        "table": "komisiLog"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"komisiLog_id_user_idx_52684e74\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"komisiLog_id_user_idx_52684e74\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"komisiLog_id_user_idx_52684e74\"",
+        "sql": "CREATE INDEX \"komisiLog_id_user_idx_52684e74\" ON \"public\".\"komisiLog\" (\"id_user\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"komisiLog_id_user_idx_52684e74\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"komisiLog_id_user_idx_52684e74\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pembayaran.pembayaran_id_penagih_idx_d0331a88",
+    "label": "Create index \"pembayaran_id_penagih_idx_d0331a88\" on \"pembayaran\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pembayaran_id_penagih_idx_d0331a88",
+        "table": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pembayaran_id_penagih_idx_d0331a88\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran_id_penagih_idx_d0331a88\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pembayaran_id_penagih_idx_d0331a88\"",
+        "sql": "CREATE INDEX \"pembayaran_id_penagih_idx_d0331a88\" ON \"public\".\"pembayaran\" (\"id_penagih\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pembayaran_id_penagih_idx_d0331a88\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran_id_penagih_idx_d0331a88\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pembayaran.pembayaran_id_pesanan_idx_cba61da2",
+    "label": "Create index \"pembayaran_id_pesanan_idx_cba61da2\" on \"pembayaran\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pembayaran_id_pesanan_idx_cba61da2",
+        "table": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pembayaran_id_pesanan_idx_cba61da2\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran_id_pesanan_idx_cba61da2\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pembayaran_id_pesanan_idx_cba61da2\"",
+        "sql": "CREATE INDEX \"pembayaran_id_pesanan_idx_cba61da2\" ON \"public\".\"pembayaran\" (\"id_pesanan\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pembayaran_id_pesanan_idx_cba61da2\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pembayaran_id_pesanan_idx_cba61da2\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pesanan.pesanan_id_nego_idx_66b843d2",
+    "label": "Create index \"pesanan_id_nego_idx_66b843d2\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pesanan_id_nego_idx_66b843d2",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pesanan_id_nego_idx_66b843d2\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_nego_idx_66b843d2\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pesanan_id_nego_idx_66b843d2\"",
+        "sql": "CREATE INDEX \"pesanan_id_nego_idx_66b843d2\" ON \"public\".\"pesanan\" (\"id_nego\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pesanan_id_nego_idx_66b843d2\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_nego_idx_66b843d2\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pesanan.pesanan_id_sales_idx_2e8e4f57",
+    "label": "Create index \"pesanan_id_sales_idx_2e8e4f57\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pesanan_id_sales_idx_2e8e4f57",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pesanan_id_sales_idx_2e8e4f57\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_sales_idx_2e8e4f57\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pesanan_id_sales_idx_2e8e4f57\"",
+        "sql": "CREATE INDEX \"pesanan_id_sales_idx_2e8e4f57\" ON \"public\".\"pesanan\" (\"id_sales\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pesanan_id_sales_idx_2e8e4f57\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pesanan_id_sales_idx_2e8e4f57\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.potongan.potongan_id_user_idx_52684e74",
+    "label": "Create index \"potongan_id_user_idx_52684e74\" on \"potongan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "potongan_id_user_idx_52684e74",
+        "table": "potongan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"potongan_id_user_idx_52684e74\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"potongan_id_user_idx_52684e74\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"potongan_id_user_idx_52684e74\"",
+        "sql": "CREATE INDEX \"potongan_id_user_idx_52684e74\" ON \"public\".\"potongan\" (\"id_user\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"potongan_id_user_idx_52684e74\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"potongan_id_user_idx_52684e74\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.komisiLog.komisiLog_id_user_fkey",
+    "label": "Add foreign key \"komisiLog_id_user_fkey\" on \"komisiLog\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "komisiLog_id_user_fkey",
+        "table": "komisiLog"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"komisiLog_id_user_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "komisiLog_id_user_fkey",
+          "public",
+          "\"public\".\"komisiLog\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"komisiLog_id_user_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"komisiLog\"\nADD CONSTRAINT \"komisiLog_id_user_fkey\"\nFOREIGN KEY (\"id_user\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"komisiLog_id_user_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "komisiLog_id_user_fkey",
+          "public",
+          "\"public\".\"komisiLog\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pembayaran.pembayaran_id_pesanan_fkey",
+    "label": "Add foreign key \"pembayaran_id_pesanan_fkey\" on \"pembayaran\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pembayaran_id_pesanan_fkey",
+        "table": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pembayaran_id_pesanan_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pembayaran_id_pesanan_fkey",
+          "public",
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pembayaran_id_pesanan_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pembayaran\"\nADD CONSTRAINT \"pembayaran_id_pesanan_fkey\"\nFOREIGN KEY (\"id_pesanan\")\nREFERENCES \"public\".\"pesanan\" (\"id_pesanan\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pembayaran_id_pesanan_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pembayaran_id_pesanan_fkey",
+          "public",
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pembayaran.pembayaran_id_penagih_fkey",
+    "label": "Add foreign key \"pembayaran_id_penagih_fkey\" on \"pembayaran\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pembayaran_id_penagih_fkey",
+        "table": "pembayaran"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pembayaran_id_penagih_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pembayaran_id_penagih_fkey",
+          "public",
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pembayaran_id_penagih_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pembayaran\"\nADD CONSTRAINT \"pembayaran_id_penagih_fkey\"\nFOREIGN KEY (\"id_penagih\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pembayaran_id_penagih_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pembayaran_id_penagih_fkey",
+          "public",
+          "\"public\".\"pembayaran\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pesanan.pesanan_id_sales_fkey",
+    "label": "Add foreign key \"pesanan_id_sales_fkey\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pesanan_id_sales_fkey",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pesanan_id_sales_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_sales_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pesanan_id_sales_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\"\nADD CONSTRAINT \"pesanan_id_sales_fkey\"\nFOREIGN KEY (\"id_sales\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pesanan_id_sales_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_sales_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pesanan.pesanan_id_nego_fkey",
+    "label": "Add foreign key \"pesanan_id_nego_fkey\" on \"pesanan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pesanan_id_nego_fkey",
+        "table": "pesanan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pesanan_id_nego_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_nego_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pesanan_id_nego_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pesanan\"\nADD CONSTRAINT \"pesanan_id_nego_fkey\"\nFOREIGN KEY (\"id_nego\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pesanan_id_nego_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pesanan_id_nego_fkey",
+          "public",
+          "\"public\".\"pesanan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.potongan.potongan_id_user_fkey",
+    "label": "Add foreign key \"potongan_id_user_fkey\" on \"potongan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "potongan_id_user_fkey",
+        "table": "potongan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"potongan_id_user_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "potongan_id_user_fkey",
+          "public",
+          "\"public\".\"potongan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"potongan_id_user_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"potongan\"\nADD CONSTRAINT \"potongan_id_user_fkey\"\nFOREIGN KEY (\"id_user\")\nREFERENCES \"public\".\"user\" (\"id_user\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"potongan_id_user_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "potongan_id_user_fkey",
+          "public",
+          "\"public\".\"potongan\""
+        ]
+      }
+    ]
+  }
+]
