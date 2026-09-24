@@ -23,7 +23,7 @@ export default function KlienPage() {
 
   const fetchKlien = async () => {
     try {
-      const res = await fetch("/api/klien");
+      const res = await fetch("/api/klien", { cache: "no-store" });
       const data = await res.json();
       if (Array.isArray(data)) setKlien(data as never[]);
     } catch (err) {
@@ -46,7 +46,8 @@ export default function KlienPage() {
         setNama("");
         setAlamat("");
         setKontak("");
-        fetchKlien();
+        await fetchKlien();
+        alert("Klien berhasil disimpan!");
       }
     } catch (err) {
       console.error(err);

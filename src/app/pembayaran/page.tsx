@@ -30,9 +30,9 @@ export default function PenagihanPage() {
   const fetchData = async () => {
     try {
       const [penagihanRes, pesananRes, usersRes] = await Promise.all([
-        fetch("/api/pembayaran"),
-        fetch("/api/pesanan"),
-        fetch("/api/users")
+        fetch("/api/pembayaran", { cache: "no-store" }),
+        fetch("/api/pesanan", { cache: "no-store" }),
+        fetch("/api/users", { cache: "no-store" })
       ]);
       const [penagihanData, pesananData, usersData] = await Promise.all([
         penagihanRes.json(),
@@ -72,7 +72,8 @@ export default function PenagihanPage() {
         setNominal("");
         setCatatan("");
         setStatus("BERHASIL");
-        fetchData();
+        await fetchData();
+        alert("Pembayaran/Penagihan berhasil dicatat!");
       } else {
         const errorData = await res.json();
         alert(errorData.error || "Terjadi kesalahan.");

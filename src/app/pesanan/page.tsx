@@ -43,10 +43,10 @@ export default function PesananPage() {
   const fetchData = async () => {
     try {
       const [pesananRes, klienRes, barangRes, usersRes] = await Promise.all([
-        fetch("/api/pesanan"),
-        fetch("/api/klien"),
-        fetch("/api/barang"),
-        fetch("/api/users")
+        fetch("/api/pesanan", { cache: "no-store" }),
+        fetch("/api/klien", { cache: "no-store" }),
+        fetch("/api/barang", { cache: "no-store" }),
+        fetch("/api/users", { cache: "no-store" })
       ]);
       const [pesananData, klienData, barangData, usersData] = await Promise.all([
         pesananRes.json(),
@@ -92,7 +92,8 @@ export default function PesananPage() {
         setQty("1");
         setIdSales("");
         setIdNego("");
-        fetchData();
+        await fetchData();
+        alert("Pesanan berhasil disimpan!");
       } else {
         const errorData = await res.json();
         alert("Gagal menyimpan pesanan: " + (errorData.error || "Unknown error"));

@@ -32,7 +32,7 @@ export default function PotonganPage() {
 
   const loadData = async () => {
     setLoading(true);
-    const [pRes, uRes] = await Promise.all([fetch("/api/potongan"), fetch("/api/users")]);
+    const [pRes, uRes] = await Promise.all([fetch("/api/potongan", { cache: "no-store" }), fetch("/api/users", { cache: "no-store" })]);
     if (pRes.ok) setPotongan(await pRes.json());
     if (uRes.ok) setUsers(await uRes.json());
     setLoading(false);
@@ -53,7 +53,7 @@ export default function PotonganPage() {
       body: JSON.stringify({ jenis: finalJenis, nominal, id_user: idUser }),
     });
     if (res.ok) {
-      resetForm(); loadData();
+      resetForm(); await loadData();
       alert("Potongan berhasil dicatat.");
     } else { const err = await res.json(); alert(err.error || "Terjadi kesalahan."); }
   };

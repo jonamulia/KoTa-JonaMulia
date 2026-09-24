@@ -28,7 +28,7 @@ export default function UsersPage() {
 
   const loadUsers = async () => {
     setLoading(true);
-    const res = await fetch("/api/users");
+    const res = await fetch("/api/users", { cache: "no-store" });
     if (res.ok) setUsers(await res.json());
     setLoading(false);
   };
@@ -42,7 +42,7 @@ export default function UsersPage() {
     const body: any = { nama, username, role };
     if (password) body.password = password;
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    if (res.ok) { resetForm(); loadUsers(); }
+    if (res.ok) { resetForm(); await loadUsers(); alert("User berhasil disimpan!"); }
     else alert("Terjadi kesalahan.");
   };
 
@@ -54,7 +54,8 @@ export default function UsersPage() {
   const handleDelete = async (deleteId: number) => {
     if (!confirm("Hapus user ini?")) return;
     await fetch(`/api/users/${deleteId}`, { method: "DELETE" });
-    loadUsers();
+    await loadUsers();
+    alert("User berhasil dihapus!");
   };
 
   const resetForm = () => {

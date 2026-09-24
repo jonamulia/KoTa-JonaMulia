@@ -29,7 +29,7 @@ export default function BarangPage() {
 
   const fetchBarang = async () => {
     try {
-      const res = await fetch("/api/barang");
+      const res = await fetch("/api/barang", { cache: "no-store" });
       const data = await res.json();
       if (Array.isArray(data)) setBarang(data as never[]);
     } catch (err) {
@@ -53,7 +53,8 @@ export default function BarangPage() {
       });
       if (res.ok) {
         resetForm();
-        fetchBarang();
+        await fetchBarang();
+        alert("Barang berhasil disimpan!");
       } else {
         const d = await res.json();
         alert(d.error || "Terjadi kesalahan");
@@ -81,7 +82,8 @@ export default function BarangPage() {
       const res = await fetch(`/api/barang/${id}`, { method: "DELETE" });
       if (res.ok) {
         if (isEditing && editId === id) resetForm();
-        fetchBarang();
+        await fetchBarang();
+        alert("Barang berhasil dihapus!");
       } else {
         const d = await res.json();
         alert(d.error || "Gagal menghapus barang (mungkin sedang digunakan).");

@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     if (status === "unauthenticated") { router.push("/login"); return; }
     if (status === "authenticated") {
-      fetch("/api/dashboard")
+      fetch("/api/dashboard", { cache: "no-store" })
         .then((res) => res.json())
         .then((d) => { setData(d); setLoading(false); })
         .catch(() => setLoading(false));

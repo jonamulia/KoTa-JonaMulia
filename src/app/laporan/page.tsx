@@ -41,7 +41,7 @@ export default function LaporanPage() {
     if (start && end) url += `?start=${start}&end=${end}`;
     
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: "no-store" });
       if (res.ok) {
         setData(await res.json());
       } else {

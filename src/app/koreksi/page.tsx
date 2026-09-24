@@ -32,8 +32,8 @@ export default function KoreksiPage() {
   const fetchData = async () => {
     try {
       const [tipsRes, usersRes] = await Promise.all([
-        fetch("/api/koreksi"),
-        fetch("/api/users")
+        fetch("/api/koreksi", { cache: "no-store" }),
+        fetch("/api/users", { cache: "no-store" })
       ]);
       const tipsData = await tipsRes.json();
       const usersData = await usersRes.json();
@@ -67,7 +67,8 @@ export default function KoreksiPage() {
         setIdPenagih("");
         setNominal("");
         setKeterangan("");
-        fetchData();
+        await fetchData();
+        alert("Tips berhasil disimpan!");
       } else {
         const errorData = await res.json();
         alert("Gagal memberikan tips: " + (errorData.error || "Unknown error"));
@@ -83,7 +84,10 @@ export default function KoreksiPage() {
     if (!window.confirm("Yakin ingin menghapus tips ini? Saldo profit Admin akan kembali bertambah.")) return;
     try {
       const res = await fetch(`/api/koreksi/${id}`, { method: "DELETE" });
-      if (res.ok) fetchData();
+      if (res.ok) {
+        await fetchData();
+        alert("Tips berhasil dihapus!");
+      }
       else alert("Gagal menghapus");
     } catch (err) {
       console.error(err);
@@ -103,7 +107,8 @@ export default function KoreksiPage() {
       });
       if (res.ok) {
         setEditingId(null);
-        fetchData();
+        await fetchData();
+        alert("Perubahan berhasil disimpan!");
       } else {
         alert("Gagal menyimpan");
       }
