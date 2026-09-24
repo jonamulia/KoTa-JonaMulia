@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/prisma/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { Temporal } from '@js-temporal/polyfill';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -77,7 +78,7 @@ export async function POST(req: Request) {
   try {
     const { id_klien, id_barang, total_harga, id_sales, id_nego, qty, tanggal } = await req.json();
     const pesanan = await db.orm.public.Pesanan.create({
-      tanggal: tanggal ? new Date(tanggal) : new Date(),
+      tanggal: tanggal ? Temporal.Instant.from(new Date(tanggal).toISOString()) : Temporal.Now.instant(),
       id_klien: parseInt(id_klien),
       id_barang: parseInt(id_barang),
       qty: qty ? parseInt(qty) : 1,
