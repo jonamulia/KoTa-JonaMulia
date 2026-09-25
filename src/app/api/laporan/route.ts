@@ -57,7 +57,7 @@ export async function GET(req: Request) {
     const rincianUangMasuk = [...uangMasuk, ...potonganAdmin].sort((a, b) => new Date(b.tanggal.toString()).getTime() - new Date(a.tanggal.toString()).getTime());
 
     // 2. Fetch Pesanan for Modal & Piutang
-    const allPesanan = await db.orm.public.Pesanan.all();
+    const allPesanan = await db.orm.public.Pesanan.where({}).include('klien').include('barang').all();
     const filteredPesanan = allPesanan.filter((p: any) => filterByDate(p.tanggal));
 
     const rincianModal = filteredPesanan.map((p: any) => ({

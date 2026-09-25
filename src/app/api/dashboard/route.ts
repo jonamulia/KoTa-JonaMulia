@@ -18,7 +18,7 @@ export async function GET() {
   if (role === "PENAGIH") penagihanQuery = { id_penagih: Number(userId) };
   // If sales/nego, we only want their pesanan's penagihan, but doing relational filtering in Memory is easier here for a small dataset, or we just fetch all and filter.
   
-  const allPesananRaw = await db.orm.public.Pesanan.where(pesananQuery).all();
+  const allPesananRaw = await db.orm.public.Pesanan.where(pesananQuery).include('barang').all();
   
   // For SALES/NEGO, penagihan should only be for their pesanan
   // For PENAGIH, pesanan might not be directly linked by an ID on the Pesanan table, but they only care about their Penagihan anyway
@@ -36,7 +36,7 @@ export async function GET() {
   }
 
   const allPesanan = role === "PENAGIH" 
-    ? await db.orm.public.Pesanan.all().then(all => all.filter(p => new Set(allPenagihan.map(x => x.id_pesanan)).has(p.id_pesanan))) 
+    ? await db.orm.public.Pesanan.where({}).include('barang').all().then(all => all.filter(p => new Set(allPenagihan.map(x => x.id_pesanan)).has(p.id_pesanan))) 
     : allPesananRaw;
 
   const successfulPenagihan = allPenagihan.filter((p: any) => p.status === "BERHASIL");
