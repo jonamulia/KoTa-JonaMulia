@@ -42,7 +42,7 @@ export async function GET() {
     let komisi_didapat = 0;
     if (role === 'SALES') komisi_didapat = (p.barang?.komisi_penjualan || 25000) * (p.qty || 1);
     if (role === 'NEGO') komisi_didapat = 10000 * (p.qty || 1);
-    if (role === 'PENAGIH') komisi_didapat = 2000 * (p.penagihan?.length || 0); // Assuming 2000 per penagihan for this pesanan
+    if (role === 'PENAGIH') komisi_didapat = 2000 * (p.qty || 1) * (p.penagihan?.length || 0); // Assuming 2000 per qty per penagihan for this pesanan
     
     const komisi_cair = komisiLogs
       .filter((log: any) => penagihanIds.includes(log.id_referensi))

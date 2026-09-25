@@ -47,7 +47,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
           
           const komisiSales = Math.floor(fraction * 25000 * (newPesanan.qty || 1));
           const komisiNego = Math.floor(fraction * 10000 * (newPesanan.qty || 1));
-          const komisiPenagih = 2000;
+          const komisiPenagih = 2000 * (newPesanan.qty || 1);
 
           await db.orm.public.KomisiLog.create({
             jenis_komisi: "UANG_MASUK",

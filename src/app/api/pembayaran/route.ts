@@ -84,8 +84,8 @@ export async function POST(req: Request) {
         const komisiSales = Math.floor(fraction * 25000 * (pesanan.qty || 1));
         // Nego gets fraction * 10.000 * qty
         const komisiNego = Math.floor(fraction * 10000 * (pesanan.qty || 1));
-        // Penagih gets flat 2.000 per successful collection
-        const komisiPenagih = 2000;
+        // Penagih gets flat 2.000 per qty per successful collection
+        const komisiPenagih = 2000 * (pesanan.qty || 1);
 
         await db.orm.public.KomisiLog.create({
           jenis_komisi: "UANG_MASUK",
