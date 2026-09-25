@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useState, useEffect } from "react";
@@ -46,7 +47,7 @@ export default function PotonganPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const finalJenis = jenisSelect === "LAINNYA" ? jenisCustom : jenisSelect;
-    if (!finalJenis.trim()) return alert("Jenis potongan harus diisi!");
+    if (!finalJenis.trim()) return Swal.fire("Informasi", "Jenis potongan harus diisi!", "info");
 
     const res = await fetch("/api/potongan", {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -54,8 +55,8 @@ export default function PotonganPage() {
     });
     if (res.ok) {
       resetForm(); await loadData();
-      alert("Potongan berhasil dicatat.");
-    } else { const err = await res.json(); alert(err.error || "Terjadi kesalahan."); }
+      Swal.fire("Berhasil!", "Potongan berhasil dicatat.", "success");
+    } else { const err = await res.json(); Swal.fire("Gagal!", err.error || "Terjadi kesalahan.", "error"); }
   };
 
   const resetForm = () => { setJenisSelect("UANG SAKU"); setJenisCustom(""); setNominal(""); setIdUser(""); setShowForm(false); };

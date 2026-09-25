@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useEffect, useState } from "react";
@@ -93,14 +94,14 @@ export default function PesananPage() {
         setIdSales("");
         setIdNego("");
         await fetchData();
-        alert("Pesanan berhasil disimpan!");
+        Swal.fire("Berhasil!", "Pesanan berhasil disimpan!", "success");
       } else {
         const errorData = await res.json();
-        alert("Gagal menyimpan pesanan: " + (errorData.error || "Unknown error"));
+        Swal.fire("Gagal!", "Gagal menyimpan pesanan: " + (errorData.error || "Unknown error", "error"););
       }
     } catch (err: any) {
       console.error(err);
-      alert("Terjadi kesalahan sistem: " + err.message);
+      Swal.fire("Gagal!", "Terjadi kesalahan sistem: " + err.message, "error");
     } finally {
       setSubmitting(false);
     }
@@ -115,11 +116,11 @@ export default function PesananPage() {
       if (res.ok) {
         fetchData();
       } else {
-        alert("Gagal menghapus pesanan.");
+        Swal.fire("Gagal!", "Gagal menghapus pesanan.", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Gagal menghapus pesanan.");
+      Swal.fire("Gagal!", "Gagal menghapus pesanan.", "error");
     }
   };
 
@@ -160,11 +161,11 @@ export default function PesananPage() {
         fetchData();
       } else {
         const data = await res.json();
-        alert("Gagal mengedit: " + data.error);
+        Swal.fire("Gagal!", "Gagal mengedit: " + data.error, "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Gagal mengedit pesanan");
+      Swal.fire("Gagal!", "Gagal mengedit pesanan", "error");
     } finally {
       setSubmitting(false);
     }

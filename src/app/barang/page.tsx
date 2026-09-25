@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useEffect, useState } from "react";
@@ -54,10 +55,10 @@ export default function BarangPage() {
       if (res.ok) {
         resetForm();
         await fetchBarang();
-        alert("Barang berhasil disimpan!");
+        Swal.fire("Berhasil!", "Barang berhasil disimpan!", "success");
       } else {
         const d = await res.json();
-        alert(d.error || "Terjadi kesalahan");
+        Swal.fire("Gagal!", d.error || "Terjadi kesalahan", "error");
       }
     } catch (err) {
       console.error(err);
@@ -76,17 +77,25 @@ export default function BarangPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus barang ini?")) return;
+    const swalResult = await Swal.fire({
+      title: 'Konfirmasi',
+      text: "Apakah Anda yakin ingin menghapus barang ini?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Batal'
+    });
+    if (!swalResult.isConfirmed) return;
     
     try {
       const res = await fetch(`/api/barang/${id}`, { method: "DELETE" });
       if (res.ok) {
         if (isEditing && editId === id) resetForm();
         await fetchBarang();
-        alert("Barang berhasil dihapus!");
+        Swal.fire("Berhasil!", "Barang berhasil dihapus!", "success");
       } else {
         const d = await res.json();
-        alert(d.error || "Gagal menghapus barang (mungkin sedang digunakan).");
+        Swal.fire("Gagal!", d.error || "Gagal menghapus barang (mungkin sedang digunakan, "error");.");
       }
     } catch (err) {
       console.error(err);

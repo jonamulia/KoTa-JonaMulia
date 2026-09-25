@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useEffect, useState } from "react";
@@ -73,10 +74,10 @@ export default function PenagihanPage() {
         setCatatan("");
         setStatus("BERHASIL");
         await fetchData();
-        alert("Pembayaran/Penagihan berhasil dicatat!");
+        Swal.fire("Berhasil!", "Pembayaran/Penagihan berhasil dicatat!", "success");
       } else {
         const errorData = await res.json();
-        alert(errorData.error || "Terjadi kesalahan.");
+        Swal.fire("Gagal!", errorData.error || "Terjadi kesalahan.", "error");
       }
     } catch (err) {
       console.error(err);

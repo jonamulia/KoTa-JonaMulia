@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useState, useEffect } from "react";
@@ -42,8 +43,8 @@ export default function UsersPage() {
     const body: any = { nama, username, role };
     if (password) body.password = password;
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    if (res.ok) { resetForm(); await loadUsers(); alert("User berhasil disimpan!"); }
-    else alert("Terjadi kesalahan.");
+    if (res.ok) { resetForm(); await loadUsers(); Swal.fire("Berhasil!", "User berhasil disimpan!", "success"); }
+    else Swal.fire("Gagal!", "Terjadi kesalahan.", "error");
   };
 
   const handleEdit = (u: User) => {
@@ -52,10 +53,18 @@ export default function UsersPage() {
   };
 
   const handleDelete = async (deleteId: number) => {
-    if (!confirm("Hapus user ini?")) return;
+    const swalResult = await Swal.fire({
+      title: 'Konfirmasi',
+      text: "Hapus user ini?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Batal'
+    });
+    if (!swalResult.isConfirmed) return;
     await fetch(`/api/users/${deleteId}`, { method: "DELETE" });
     await loadUsers();
-    alert("User berhasil dihapus!");
+    Swal.fire("Berhasil!", "User berhasil dihapus!", "success");
   };
 
   const resetForm = () => {

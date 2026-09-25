@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useEffect, useState } from "react";
@@ -68,27 +69,35 @@ export default function KoreksiPage() {
         setNominal("");
         setKeterangan("");
         await fetchData();
-        alert("Tips berhasil disimpan!");
+        Swal.fire("Berhasil!", "Tips berhasil disimpan!", "success");
       } else {
         const errorData = await res.json();
-        alert("Gagal memberikan tips: " + (errorData.error || "Unknown error"));
+        Swal.fire("Gagal!", "Gagal memberikan tips: " + (errorData.error || "Unknown error", "error"););
       }
     } catch (err: any) {
-      alert("Terjadi kesalahan: " + err.message);
+      Swal.fire("Gagal!", "Terjadi kesalahan: " + err.message, "error");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Yakin ingin menghapus tips ini? Saldo profit Admin akan kembali bertambah.")) return;
+    const swalResult = await Swal.fire({
+      title: 'Konfirmasi',
+      text: "Yakin ingin menghapus tips ini? Saldo profit Admin akan kembali bertambah.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Batal'
+    });
+    if (!swalResult.isConfirmed) return;
     try {
       const res = await fetch(`/api/koreksi/${id}`, { method: "DELETE" });
       if (res.ok) {
         await fetchData();
-        alert("Tips berhasil dihapus!");
+        Swal.fire("Berhasil!", "Tips berhasil dihapus!", "success");
       }
-      else alert("Gagal menghapus");
+      else Swal.fire("Gagal!", "Gagal menghapus", "error");
     } catch (err) {
       console.error(err);
     }
@@ -97,7 +106,15 @@ export default function KoreksiPage() {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingId) return;
-    if (!window.confirm("Simpan perubahan tips ini?")) return;
+    const swalResult = await Swal.fire({
+      title: 'Konfirmasi',
+      text: "Simpan perubahan tips ini?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Batal'
+    });
+    if (!swalResult.isConfirmed) return;
     setEditSubmitting(true);
     try {
       const res = await fetch(`/api/koreksi/${editingId}`, {
@@ -108,9 +125,9 @@ export default function KoreksiPage() {
       if (res.ok) {
         setEditingId(null);
         await fetchData();
-        alert("Perubahan berhasil disimpan!");
+        Swal.fire("Berhasil!", "Perubahan berhasil disimpan!", "success");
       } else {
-        alert("Gagal menyimpan");
+        Swal.fire("Gagal!", "Gagal menyimpan", "error");
       }
     } catch (err) {
       console.error(err);

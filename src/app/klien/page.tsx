@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 "use client";
 
 import { useEffect, useState } from "react";
@@ -47,7 +48,7 @@ export default function KlienPage() {
         setAlamat("");
         setKontak("");
         await fetchKlien();
-        alert("Klien berhasil disimpan!");
+        Swal.fire("Berhasil!", "Klien berhasil disimpan!", "success");
       }
     } catch (err) {
       console.error(err);
