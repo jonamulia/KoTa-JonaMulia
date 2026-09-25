@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2';
 "use client";
+import Swal from 'sweetalert2';
 
 import { useEffect, useState } from "react";
 import { Users, PlusCircle, MapPin, Phone } from "lucide-react";

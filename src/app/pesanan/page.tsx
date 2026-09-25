@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2';
 "use client";
+import Swal from 'sweetalert2';
 
 import { useEffect, useState } from "react";
 import { ShoppingCart, PlusCircle, User, Package, Edit2, Trash2 } from "lucide-react";
@@ -97,7 +97,7 @@ export default function PesananPage() {
         Swal.fire("Berhasil!", "Pesanan berhasil disimpan!", "success");
       } else {
         const errorData = await res.json();
-        Swal.fire("Gagal!", "Gagal menyimpan pesanan: " + (errorData.error || "Unknown error", "error"););
+        Swal.fire("Gagal!", "Gagal menyimpan pesanan: " + (errorData.error || "Unknown error"), "error");
       }
     } catch (err: any) {
       console.error(err);

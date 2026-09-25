@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2';
 "use client";
+import Swal from 'sweetalert2';
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";

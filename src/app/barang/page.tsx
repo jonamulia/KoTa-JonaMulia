@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2';
 "use client";
+import Swal from 'sweetalert2';
 
 import { useEffect, useState } from "react";
 import { Package, PlusCircle, Pencil, Trash2 } from "lucide-react";
@@ -95,7 +95,7 @@ export default function BarangPage() {
         Swal.fire("Berhasil!", "Barang berhasil dihapus!", "success");
       } else {
         const d = await res.json();
-        Swal.fire("Gagal!", d.error || "Gagal menghapus barang (mungkin sedang digunakan, "error");.");
+        Swal.fire("Gagal!", d.error || "Gagal menghapus barang (mungkin sedang digunakan)", "error");
       }
     } catch (err) {
       console.error(err);

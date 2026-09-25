@@ -1,5 +1,5 @@
-import Swal from 'sweetalert2';
 "use client";
+import Swal from 'sweetalert2';
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -72,7 +72,7 @@ export default function KoreksiPage() {
         Swal.fire("Berhasil!", "Tips berhasil disimpan!", "success");
       } else {
         const errorData = await res.json();
-        Swal.fire("Gagal!", "Gagal memberikan tips: " + (errorData.error || "Unknown error", "error"););
+        Swal.fire("Gagal!", "Gagal memberikan tips: " + (errorData.error || "Unknown error"), "error");
       }
     } catch (err: any) {
       Swal.fire("Gagal!", "Terjadi kesalahan: " + err.message, "error");
